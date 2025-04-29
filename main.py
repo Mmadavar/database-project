@@ -1,11 +1,7 @@
 from PyQt6.QtWidgets import QMainWindow, QStackedWidget, QApplication
 from loginFormWidget import loginFormWidget
 from sys import argv
-
-
-class MainWidget(QStackedWidget):
-    def __init__(self, parent = ...):
-        super().__init__(parent)
+import oracledb
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -22,12 +18,10 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self.stackedWidget)
 
-# class App(QApplication):
-#     def __init__(self, argv):
-#         super().__init__(argv)
+        self.database = None
 
 if __name__ == '__main__':
-    app = QApplication([])
+    app = QApplication(argv)
     window = MainWindow()
     window.show()
     app.exec()

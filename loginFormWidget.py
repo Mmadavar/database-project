@@ -1,39 +1,47 @@
 from PyQt6.QtWidgets import QLineEdit, QPushButton, QLabel, QWidget, QFormLayout
+import database
 
 class loginFormWidget(QWidget):
     def __init__(self, parent = None):
         super(QWidget, self).__init__(parent=parent)
         layout = QFormLayout(self)
 
-        serverAddressLabel = QLabel(self)
-        serverAddressLabel.setText('Database Server')
-        serverAddressInput = QLineEdit(self)
-        layout.addRow(serverAddressLabel, serverAddressInput)
+        # serverAddressLabel = QLabel(self)
+        # serverAddressLabel.setText('Database Server')
+        # self.serverAddressInput = QLineEdit(self)
+        # layout.addRow(serverAddressLabel, self.serverAddressInput)
 
         serverAccountLabel = QLabel(self)
         serverAccountLabel.setText('Database Account')
-        serverAccountInput = QLineEdit(self)
-        layout.addRow(serverAccountLabel, serverAccountInput)
+        self.serverAccountInput = QLineEdit(self)
+        layout.addRow(serverAccountLabel, self.serverAccountInput)
 
         serverPasswordLabel = QLabel(self)
         serverPasswordLabel.setText('Database Password')
-        serverPasswordInput = QLineEdit(self)
-        serverPasswordInput.setEchoMode(QLineEdit.EchoMode.Password)
-        layout.addRow(serverPasswordLabel, serverPasswordInput)
+        self.serverPasswordInput = QLineEdit(self)
+        self.serverPasswordInput.setEchoMode(QLineEdit.EchoMode.Password)
+        layout.addRow(serverPasswordLabel, self.serverPasswordInput)
 
         userIdLabel = QLabel(self)
         userIdLabel.setText('User ID')
-        userIdInput = QLineEdit(self)
-        layout.addRow(userIdLabel, userIdInput)
+        self.userIdInput = QLineEdit(self)
+        layout.addRow(userIdLabel, self.userIdInput)
 
-        loginUserButton = QPushButton(self)
-        loginUserButton.setText('Login As User')
+        self.loginUserButton = QPushButton(self)
+        self.loginUserButton.setText('Login As User')
+        self.loginUserButton.clicked.connect(self.connect_to_database)
 
-        loginAdminButton = QPushButton(self)
-        loginAdminButton.setText('Login As Admin')
-        layout.addRow(loginUserButton, loginAdminButton)
+        self.loginAdminButton = QPushButton(self)
+        self.loginAdminButton.setText('Login As Admin')
+        layout.addRow(self.loginUserButton, self.loginAdminButton)
 
         self.setLayout(layout)
+    
+    def connect_to_database(self):
 
+        self.parent().parent()
 
-        
+        account = self.serverAccountInput.text()
+        password = self.serverPasswordInput.text()
+
+        database.connect(account, password)
