@@ -6,11 +6,6 @@ class loginFormWidget(QWidget):
         super(QWidget, self).__init__(parent=parent)
         layout = QFormLayout(self)
 
-        # serverAddressLabel = QLabel(self)
-        # serverAddressLabel.setText('Database Server')
-        # self.serverAddressInput = QLineEdit(self)
-        # layout.addRow(serverAddressLabel, self.serverAddressInput)
-
         serverAccountLabel = QLabel(self)
         serverAccountLabel.setText('Database Account')
         self.serverAccountInput = QLineEdit(self)
