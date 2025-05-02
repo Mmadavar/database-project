@@ -19,34 +19,50 @@ def setUserId(id: int):
 def addClient(first: str, last: str, income: str):
     pass
 
+def dropTables():
+    cursor = connection.cursor()
+
+    table_names = ['Client', 'Auto_Loan', 'Personal_Loan', 'Student_Loan', 'Mortgage']
+
+    table_names.reverse()
+
+    for table in table_names:
+        print(f'Dropping table "{table}"')
+        try:
+            cursor.execute(
+                f'DROP TABLE {table}'
+            )
+        except Exception as e:
+            print(f'Table "{table}" does not exist, skipping.')
+            print(e)
+
 def createTables():
     cursor = connection.cursor()
 
     cursor.execute(
-    '''create table Client (
-        client_id int AUTO_INCREMENT,
-        first_name varchar(20),
-        last_name varchar(20),
-        income decimal(10, 2),
-        primary key (client_id)
-    );''')
+        '''create table Client (
+        client_id int, 
+        first_name varchar(20), 
+        last_name varchar(20), 
+        income float, 
+        primary key (client_id))''')
 
     cursor.execute(
         '''create table Auto_Loan (
             client_id int,
             VIN varchar(17),
-            Loan_Amount float(2),
-            Interest_Rate float(2),
+            Loan_Amount float,
+            Interest_Rate float,
             Start_Date TIMESTAMP,
             End_Date TIMESTAMP,
             Number_Of_Payments Integer,
             Make varchar(50),
             Model varchar(50),
-            Amount_Paid float(2),
-            Year_made year,
-            PRIMARY KEY(VIN)
+            Amount_Paid float,
+            Year_made int,
+            PRIMARY KEY(VIN),
             foreign key (client_id) references Client(client_id)
-        );''')
+        )''')
     
     cursor.execute(
         '''Create table Personal_Loan (
@@ -61,12 +77,12 @@ def createTables():
             Num_Of_Payments Integer,
             PRIMARY KEY(loan_id),
             foreign key (client_id) references Client(client_id)
-        ); ''')
+        )''')
 
     cursor.execute(
         '''create table Student_Loan (
             client_id int,
-            loan_id int AUTO_INCREMENT,
+            loan_id int,
             loan_term varchar(50),
             disbursement_date DATE,
             Repayment_Start_Date DATE,
@@ -76,7 +92,7 @@ def createTables():
             Loan_type varchar(50),
             Primary Key (loan_id),
             foreign key (client_id) references Client(client_id)
-        );''')
+        )''')
 
     cursor.execute(
         '''create table Mortgage (
@@ -93,4 +109,4 @@ def createTables():
             end_date DATE,
             PRIMARY KEY (house_address),
             foreign key (client_id) references Client(client_id)
-        );''')
+        )''')
