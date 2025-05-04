@@ -1,5 +1,6 @@
-from PyQt6.QtWidgets import QMainWindow, QStackedWidget, QApplication
+from PyQt6.QtWidgets import QMainWindow, QStackedWidget, QApplication, QTabWidget
 from loginDialog import loginDialog
+from customerListWidget import customerListWidget
 from sys import argv
 import oracledb
 
@@ -10,18 +11,11 @@ class MainWindow(QMainWindow):
         loginPopup = loginDialog()
         loginPopup.exec()
 
+        self.widget = QTabWidget()
 
-        # self.stackedWidget = QStackedWidget()
-        
-        # LoginFormWidget = loginFormWidget(self.stackedWidget)
+        self.widget.addTab(customerListWidget(), 'customer list')
 
-        # self.stackedWidget.setCurrentIndex(0)
-
-        # self.stackedWidget.addWidget(LoginFormWidget)
-
-        # self.setCentralWidget(self.stackedWidget)
-
-        # self.database = None
+        self.setCentralWidget(self.widget)
 
 if __name__ == '__main__':
     app = QApplication(argv)

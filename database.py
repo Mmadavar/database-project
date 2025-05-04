@@ -35,6 +35,18 @@ def getClient(client_id: int):
     res = cursor.execute('SELECT * FROM Client WHERE id = :id', id=client_id).fetchone()
     return res
 
+def getClients():
+    return connection.cursor().execute(
+        'SELECT * FROM client'
+    ).fetchall()
+
+def updateClient(client_id: int, first: str, last: str, income: float):
+    connection.cursor().execute(
+        'UPDATE Client SET first_name=:first, last_name=:last, income=:income WHERE client_id=:id',
+        [first, last, income, client_id]
+    )
+    connection.commit()
+
 def getAutoLoan(vin: str):
     return connection.cursor().execute(
         'SELECT * FROM Auto_Loan WHERE VIN = :vin', vin=vin

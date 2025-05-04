@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QFormLayout, QLabel, QPushButton, QDialog
 
 class infoPopup(QDialog):
 
-    def __init__(self, parent, data: dict[str, str], closeAction):
+    def __init__(self, parent, data: dict[str, str], closeAction = None):
         super().__init__(parent)
         
         layout = QFormLayout()

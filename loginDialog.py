@@ -31,14 +31,22 @@ class loginDialog(QDialog):
 
         self.loginUserButton = QPushButton(self)
         self.loginUserButton.setText('Login As User')
-        self.loginUserButton.clicked.connect(self.connect_to_database)
+        self.loginUserButton.clicked.connect(self.login_as_client)
 
         self.loginAdminButton = QPushButton(self)
         self.loginAdminButton.setText('Login As Admin')
+        self.loginAdminButton.clicked.connect(self.login_as_admin)
         layout.addRow(self.loginUserButton, self.loginAdminButton)
 
         self.setLayout(layout)
     
+    def login_as_admin(self):
+        self.connect_to_database()
+
+    def login_as_client(self):
+        self.connect_to_database()
+        database.setUserId(int(self.userIdInput.text()))
+
     def connect_to_database(self):
 
         account = self.serverAccountInput.text()
