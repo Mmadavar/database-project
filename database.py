@@ -37,13 +37,19 @@ def getClient(client_id: int):
 
 def getClients():
     return connection.cursor().execute(
-        'SELECT * FROM client'
+        'SELECT * FROM client ORDER BY client_id ASC'
     ).fetchall()
 
 def updateClient(client_id: int, first: str, last: str, income: float):
     connection.cursor().execute(
         'UPDATE Client SET first_name=:first, last_name=:last, income=:income WHERE client_id=:id',
         [first, last, income, client_id]
+    )
+    connection.commit()
+
+def deleteClient(client_id: int):
+    connection.cursor().execute(
+        'DELETE FROM Client WHERE client_id = :id', id=client_id
     )
     connection.commit()
 
