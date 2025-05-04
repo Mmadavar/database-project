@@ -20,4 +20,6 @@ class infoPopup(QDialog):
         closeButton.clicked.connect(closeAction)
         layout.addWidget(closeButton)
 
+        self.setLayout(layout)
+
 

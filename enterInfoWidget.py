@@ -27,6 +27,7 @@ class infoPopup(QDialog):
         closeButton = QPushButton()
         closeButton.clicked.connect(closeAction)
         layout.addWidget(closeButton)
+        self.setLayout(layout)
 
 
     def getData(self):

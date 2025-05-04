@@ -16,8 +16,44 @@ def setUserId(id: int):
     global userid
     userid = id
 
-def addClient(first: str, last: str, income: str):
-    pass
+def addClient(first: str, last: str, income: str, id: int = None):
+    cursor = connection.cursor()
+
+    if id is None:
+        id = cursor.execute(
+            'SELECT max(client_id) FROM Client'
+        ).fetchone()[0] + 1
+    
+    cursor.execute(
+        'INSERT INTO Client VALUES (:id, :first, :last, :income)', [id, first, last, income]
+    )
+
+    connection.commit()
+
+def getClient(client_id: int):
+    cursor = connection.cursor()
+    res = cursor.execute('SELECT * FROM Client WHERE id = :id', id=client_id).fetchone()
+    return res
+
+def getAutoLoan(vin: str):
+    return connection.cursor().execute(
+        'SELECT * FROM Auto_Loan WHERE VIN = :vin', vin=vin
+    ).fetchone()
+
+def getPersonalLoan(loan_id: int):
+    return connection.cursor().execute(
+        'SELECT * FROM Personal_Loan WHERE loan_id = :id', id=loan_id
+    ).fetchone()
+
+def getStudentLoan(loan_id: int):
+    return connection.cursor().execute(
+        'SELECT * FROM Student_Loan WHERE loan_id = :id', id=loan_id
+    ).fetchone()
+
+def getMortgage(house_address: str):
+    return connection.cursor().execute(
+        'SELECT * FROM Mortgate WHERE address = :addr', addr = house_address
+    ).fetchone()
 
 def dropTables():
     cursor = connection.cursor()
@@ -110,3 +146,5 @@ def createTables():
             PRIMARY KEY (house_address),
             foreign key (client_id) references Client(client_id)
         )''')
+    
+    connection.commit()

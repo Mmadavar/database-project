@@ -1,7 +1,14 @@
-from PyQt6.QtWidgets import QLineEdit, QPushButton, QLabel, QWidget, QFormLayout
+from PyQt6.QtWidgets import QLineEdit, QPushButton, QLabel, QWidget, QFormLayout, QDialog, QStackedLayout
 import database
 
-class loginFormWidget(QWidget):
+# class loginDialog(QDialog):
+#     def __init__(self, parent = None):
+#         super(QWidget, self).__init__(parent=parent)
+#         layout = QStackedLayout()
+#         layout.addWidget(loginFormWidget())
+#         self.setLayout(layout)
+
+class loginDialog(QDialog):
     def __init__(self, parent = None):
         super(QWidget, self).__init__(parent=parent)
         layout = QFormLayout(self)
@@ -34,9 +41,9 @@ class loginFormWidget(QWidget):
     
     def connect_to_database(self):
 
-        self.parent().parent()
-
         account = self.serverAccountInput.text()
         password = self.serverPasswordInput.text()
 
         database.connect(account, password)
+
+        self.close()
