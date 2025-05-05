@@ -163,6 +163,11 @@ def getMortgage(house_address: str):
         'SELECT * FROM Mortgate WHERE address = :addr', addr = house_address
     ).fetchone()
 
+def get_customers():
+    return connection.cursor().execute(
+        'SELECT * FROM Client'
+    ).fetchall()
+
 def dropTables():
     cursor = connection.cursor()
 
