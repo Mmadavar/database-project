@@ -22,7 +22,12 @@ def addClient(first: str, last: str, income: str, id: int = None):
     if id is None:
         id = cursor.execute(
             'SELECT max(client_id) FROM Client'
-        ).fetchone()[0] + 1
+        ).fetchone()[0]
+    
+    if id is None:
+        id = 1
+    else:
+        id += 1
     
     cursor.execute(
         'INSERT INTO Client VALUES (:id, :first, :last, :income)', [id, first, last, income]
@@ -57,6 +62,47 @@ def getAutoLoan(vin: str):
     return connection.cursor().execute(
         'SELECT * FROM Auto_Loan WHERE VIN = :vin', vin=vin
     ).fetchone()
+
+def getAutoLoans(client_id: int | None = None):
+    if client_id is not None:
+        return connection.cursor().execute(
+            'SELECT * FROM Auto_Loan WHERE client_id = :id ORDER BY VIN ASC', id=client_id
+        )
+    else:
+        return connection.cursor().execute(
+            'SELECT * FROM Auto_Loan order by VIN ASC'
+        ).fetchall()
+
+def getAutoLoan(vin: str):
+    return connection.cursor().execute(
+        'SELECT * FROM Auto_Loan WHERE vin = :vin', vin=vin
+    ).fetchone()
+
+def addAutoLoan(
+        client_id: int, VIN: str, loan_amount: float, interest_rate: float, start_date: str, end_date: str,
+        num_payments: int, make: str, model: str, amount_paid: float, year_made: int
+):
+    connection.cursor().execute(
+        'INSERT INTO Auto_Loan VALUES (:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11)',
+        [client_id, VIN, loan_amount, interest_rate, start_date, end_date, num_payments, make, model, amount_paid, year_made ]
+    )
+    connection.commit()
+
+def updateAutoLoan(
+        client_id: int, VIN: str, loan_amount: float, interest_rate: float, start_date: str, end_date: str,
+        num_payments: int, make: str, model: str, amount_paid: float, year_made: int
+):
+    connection.cursor().execute(
+        'UPDATE Auto_Loan SET client_id=:1, loan_amount=:2, interest_rate=:3, start_date=:4, end_date=:5, \
+            number_of_payments=:6, make=:7, model=:8, amount_paid=:9, year_made=:10 WHERE vin=:11',
+        [client_id, loan_amount, interest_rate, start_date, end_date, num_payments, make, model, amount_paid, year_made, VIN]
+    )
+    connection.commit()
+
+def deleteAutoLoan(vin: str):
+    connection.cursor().execute(
+        'DELETE FROM Auto_Loan WHERE vin=:vin', vin=vin
+    )
 
 def getPersonalLoan(loan_id: int):
     return connection.cursor().execute(

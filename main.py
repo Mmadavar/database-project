@@ -1,8 +1,9 @@
 from PyQt6.QtWidgets import QMainWindow, QStackedWidget, QApplication, QTabWidget
 from loginDialog import loginDialog
 from customerListWidget import customerListWidget
+from autoLoanListWidget import autoLoanListWidget
 from sys import argv
-import oracledb
+import database
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -13,7 +14,11 @@ class MainWindow(QMainWindow):
 
         self.widget = QTabWidget()
 
-        self.widget.addTab(customerListWidget(), 'customer list')
+        # only show customer list when logged in as admin
+        if not database.userid:
+            self.widget.addTab(customerListWidget(), 'Customer List')
+
+        self.widget.addTab(autoLoanListWidget(), 'Auto Loans')
 
         self.setCentralWidget(self.widget)
 

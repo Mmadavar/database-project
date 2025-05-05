@@ -6,7 +6,7 @@ class customerListWidget(QWidget):
     def __init__(self, parent = None):
         super(customerListWidget, self).__init__(parent)
         layout = QVBoxLayout()
-        mainwidget = customerScrollArea()
+        mainwidget = customerList()
         layout.addWidget(mainwidget)
 
         deleteButton = QPushButton(self)
@@ -23,15 +23,12 @@ class customerListWidget(QWidget):
         layout.addLayout(bottomLayout)
         self.setLayout(layout)
 
-class customerScrollArea(QScrollArea):
+class customerList(QListWidget):
     def __init__(self, parent = None):
-        super(customerScrollArea, self).__init__(parent)        
-        self.listWidget = QListWidget(self)
-        self.listWidget.itemDoubleClicked.connect(self.handleDoubleClick)
-        self.listWidget.itemClicked.connect(self.handleSingleClick)
+        super(customerList, self).__init__(parent)        
+        self.itemDoubleClicked.connect(self.handleDoubleClick)
+        self.itemClicked.connect(self.handleSingleClick)
         
-        self.setWidget(self.listWidget)
-
         self.editing = None
 
         self.clients = None
@@ -39,9 +36,9 @@ class customerScrollArea(QScrollArea):
     
     def refresh(self):
         self.clients = database.getClients()
-        self.listWidget.clear()
+        self.clear()
         for i in self.clients:
-            self.listWidget.addItem(
+            self.addItem(
                 f'id:{i[0]}, name: {i[1]} {i[2]}, income: {i[3]}'
             )
     
