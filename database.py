@@ -73,11 +73,6 @@ def getAutoLoans(client_id: int | None = None):
             'SELECT * FROM Auto_Loan order by VIN ASC'
         ).fetchall()
 
-def getAutoLoan(vin: str):
-    return connection.cursor().execute(
-        'SELECT * FROM Auto_Loan WHERE vin = :vin', vin=vin
-    ).fetchone()
-
 def addAutoLoan(
         client_id: int, VIN: str, loan_amount: float, interest_rate: float, start_date: str, end_date: str,
         num_payments: int, make: str, model: str, amount_paid: float, year_made: int
@@ -108,6 +103,26 @@ def getPersonalLoan(loan_id: int):
     return connection.cursor().execute(
         'SELECT * FROM Personal_Loan WHERE loan_id = :id', id=loan_id
     ).fetchone()
+
+def getPersonalLoans(client_id: int | None = None):
+    if client_id is not None:
+        return connection.cursor().execute(
+            'SELECT * FROM Personal_Loan WHERE client_id = :id', id=client_id
+        ).fetchall()
+    else:
+        return connection.cursor().execute(
+            'SELECT * FROM Personal_Loan'
+        )
+    
+def addPersonalLoan():
+    pass
+
+def updatePersonalLoan():
+    pass
+
+def deletePersonalLoan():
+    pass
+
 
 def getStudentLoan(loan_id: int):
     return connection.cursor().execute(

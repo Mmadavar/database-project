@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QScrollArea, QListWidget, QListWidgetItem, QWidget, QPushButton, QHBoxLayout, QVBoxLayout
 import database
 from enterInfoDialog import enterInfoDialog
+from searchBarWidget import searchBarWidget
 import datetime
 
 class autoLoanListWidget(QWidget):
@@ -22,6 +23,9 @@ class autoLoanListWidget(QWidget):
         bottomLayout.addWidget(deleteButton)
         bottomLayout.addWidget(addButton)
         layout.addLayout(bottomLayout)
+
+        layout.addWidget(searchBarWidget(self, 'Search VIN', lambda x: mainwidget.openDialog(x)))
+
         self.setLayout(layout)
 
 class autoLoanList(QListWidget):
@@ -49,6 +53,11 @@ class autoLoanList(QListWidget):
 
     def handleDoubleClick(self, item: QListWidgetItem):
         self.handleSingleClick(item)
+        self.openDialog()
+
+    def openDialog(self, loanId = None):
+        if self.editing is None:
+            self.editing = loanId
 
         target = None
         for i in self.data:
@@ -71,11 +80,8 @@ class autoLoanList(QListWidget):
             'Model': target[8]
         }
 
-        # .strftime('"%Y-%m-%dT%H:%M:%S')
-
         popup = enterInfoDialog(self, data, self.saveData)
         popup.open()
-            
 
     def saveData(self, data:dict):
         vals = list(data.values())
