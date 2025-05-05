@@ -1,4 +1,5 @@
 import oracledb
+from datetime import datetime
 
 SERVER = 'h3oracle.ad.psu.edu'
 SERVICE_NAME = 'orclpdb.ad.psu.edu'
@@ -74,8 +75,8 @@ def getAutoLoans(client_id: int | None = None):
         ).fetchall()
 
 def addAutoLoan(
-        client_id: int, VIN: str, loan_amount: float, interest_rate: float, start_date: str, end_date: str,
-        num_payments: int, make: str, model: str, amount_paid: float, year_made: int
+        client_id: int, VIN: str, loan_amount: float, interest_rate: float, start_date: datetime, 
+        end_date: datetime, num_payments: int, make: str, model: str, amount_paid: float, year_made: int
 ):
     connection.cursor().execute(
         'INSERT INTO Auto_Loan VALUES (:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11)',
@@ -84,8 +85,8 @@ def addAutoLoan(
     connection.commit()
 
 def updateAutoLoan(
-        client_id: int, VIN: str, loan_amount: float, interest_rate: float, start_date: str, end_date: str,
-        num_payments: int, make: str, model: str, amount_paid: float, year_made: int
+        client_id: int, VIN: str, loan_amount: float, interest_rate: float, start_date: datetime, 
+        end_date: datetime, num_payments: int, make: str, model: str, amount_paid: float, year_made: int
 ):
     connection.cursor().execute(
         'UPDATE Auto_Loan SET client_id=:1, loan_amount=:2, interest_rate=:3, start_date=:4, end_date=:5, \
@@ -114,15 +115,43 @@ def getPersonalLoans(client_id: int | None = None):
             'SELECT * FROM Personal_Loan'
         )
     
-def addPersonalLoan():
-    pass
+def addPersonalLoan(client_id: int, loan_purpose: str, loan_amount: str, 
+                    interest_rate: float, amount_paid: float, start_date: datetime, 
+                    end_date: datetime, number_of_payments: int, loan_id: int | None = None):
+    if loan_id is None:
+        loan_id = connection.cursor().execute(
+            'SELECT max(loan_id) FROM Personal_Loan'
+        ).fetchone()[0]
+    
+    if loan_id is None:
+        loan_id = 1
+    else:
+        loan_id += 1
+    
+    connection.cursor().execute(
+        'INSERT INTO Personal_Loan VALUES (:1, :2, :3, :4, :5, :6, :7, :8, :9)',
+        [client_id, loan_id, loan_purpose, loan_amount, interest_rate, amount_paid, 
+         start_date, end_date, number_of_payments]
+    )
 
-def updatePersonalLoan():
-    pass
+    connection.commit()
 
-def deletePersonalLoan():
-    pass
+def updatePersonalLoan(client_id: int, loan_purpose: str, loan_amount: str, 
+                    interest_rate: float, amount_paid: float, start_date: datetime, 
+                    end_date: datetime, number_of_payments: int, loan_id: int):
+    connection.cursor().execute(
+        'UPDATE Personal_Loan SET client_id=:1, Loan_Purpose=:2, Loan_Amount=:3, Interest_Rate=:4, \
+            Amount_paid=:5, Start_Date=:6, End_Date=:7, Num_Of_Payments=:8 WHERE loan_id=:9',
+            [client_id, loan_purpose, loan_amount, interest_rate, amount_paid,
+             start_date, end_date, number_of_payments, loan_id]
+    )
+    connection.commit()
 
+def deletePersonalLoan(loan_id: int):
+    connection.cursor().execute(
+        'DELETE FROM Personal_Loan WHERE loan_id = :loan_id', loan_id = loan_id
+    )
+    connection.commit()
 
 def getStudentLoan(loan_id: int):
     return connection.cursor().execute(
@@ -186,7 +215,7 @@ def createTables():
             Loan_Purpose varchar2(50),
             Loan_Amount float(2),
             Interest_Rate float(2),
-            Amount_piad float(2),
+            Amount_paid float(2),
             Start_Date DATE,
             End_Date DATE,
             Num_Of_Payments Integer,
