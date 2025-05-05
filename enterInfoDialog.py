@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QFormLayout, QLabel, QPushButton, QDialog, QLineEdit
 
-class infoPopup(QDialog):
+class enterInfoDialog(QDialog):
 
     def __init__(self, parent, data: dict[str, str] | list[str], saveAction):
 

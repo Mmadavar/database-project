@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QScrollArea, QListWidget, QListWidgetItem, QWidget, QPushButton, QHBoxLayout, QVBoxLayout
 import database
-from enterInfoWidget import infoPopup
+from enterInfoDialog import enterInfoDialog
 
 class customerListWidget(QWidget):
     def __init__(self, parent = None):
@@ -71,7 +71,7 @@ class customerScrollArea(QScrollArea):
             'Income': target[3]
         }
         self.editing = client_id
-        popup = infoPopup(self, data, self.saveData)
+        popup = enterInfoDialog(self, data, self.saveData)
         popup.open()
             
 
@@ -95,5 +95,5 @@ class customerScrollArea(QScrollArea):
             'Last Name',
             'Income'
         ]
-        popup = infoPopup(self, data, self.newData)
+        popup = enterInfoDialog(self, data, self.newData)
         popup.open()

@@ -1,8 +1,8 @@
 from PyQt6.QtWidgets import QFormLayout, QLabel, QPushButton, QDialog
 
-class infoPopup(QDialog):
+class showInfoDialog(QDialog):
 
-    def __init__(self, parent, data: dict[str, str], closeAction = None):
+    def __init__(self, parent, data: dict[str, str]):
         super().__init__(parent)
         
         layout = QFormLayout()
@@ -17,7 +17,7 @@ class infoPopup(QDialog):
             layout.addRow(title, value)
         
         closeButton = QPushButton()
-        closeButton.clicked.connect(closeAction)
+        closeButton.clicked.connect(self.close())
         layout.addWidget(closeButton)
 
         self.setLayout(layout)
