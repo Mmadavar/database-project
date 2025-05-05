@@ -113,7 +113,7 @@ def getPersonalLoans(client_id: int | None = None):
     else:
         return connection.cursor().execute(
             'SELECT * FROM Personal_Loan'
-        )
+        ).fetchall()
     
 def addPersonalLoan(client_id: int, loan_purpose: str, loan_amount: str, 
                     interest_rate: float, amount_paid: float, start_date: datetime, 
