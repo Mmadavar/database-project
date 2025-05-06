@@ -38,7 +38,7 @@ def addClient(first: str, last: str, income: str, id: int = None):
 
 def getClient(client_id: int):
     cursor = connection.cursor()
-    res = cursor.execute('SELECT * FROM Client WHERE id = :id', id=client_id).fetchone()
+    res = cursor.execute('SELECT * FROM Client WHERE client_id = :id', id=client_id).fetchone()
     return res
 
 def getClients():
@@ -99,6 +99,7 @@ def deleteAutoLoan(vin: str):
     connection.cursor().execute(
         'DELETE FROM Auto_Loan WHERE vin=:vin', vin=vin
     )
+    connection.commit()
 
 def getPersonalLoan(loan_id: int):
     return connection.cursor().execute(
@@ -207,10 +208,11 @@ def deleteStudentLoan(loan_id: int):
     connection.cursor().execute(
         'DELETE FROM Student_Loan WHERE loan_id = :loan_id', loan_id = loan_id
     )
+    connection.commit()
 
 def getMortgage(house_address: str):
     return connection.cursor().execute(
-        'SELECT * FROM Mortgage WHERE address = :addr', addr=house_address
+        'SELECT * FROM Mortgage WHERE house_address = :addr', addr=house_address
     ).fetchone()
 
 def getMortgages():
@@ -225,7 +227,7 @@ def getMortgages():
 
 def deleteMortgage(house_address: str):
     connection.cursor().execute(
-    'DELETE FROM Mortgage WHERE address = :addr', addr=house_address
+    'DELETE FROM Mortgage WHERE house_address = :addr', addr=house_address
     )
     connection.commit()
 
