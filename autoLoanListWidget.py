@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QListWidget, QListWidgetItem, QWidget, QPushButton, QHBoxLayout, QVBoxLayout
+from PyQt6.QtWidgets import QScrollArea, QListWidget, QListWidgetItem, QWidget, QPushButton, QHBoxLayout, QVBoxLayout
 import database
 from enterInfoDialog import enterInfoDialog
 from searchBarWidget import searchBarWidget
@@ -56,8 +56,9 @@ class autoLoanList(QListWidget):
         self.openDialog()
 
     def openDialog(self, loanId = None):
-        if self.editing is None:
+        if loanId is not None:
             self.editing = loanId
+            self.clearSelection()
 
         target = None
         for i in self.data:
