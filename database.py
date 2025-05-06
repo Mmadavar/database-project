@@ -158,6 +158,56 @@ def getStudentLoan(loan_id: int):
         'SELECT * FROM Student_Loan WHERE loan_id = :id', id=loan_id
     ).fetchone()
 
+def getStudentLoans(client_id: int | None = None):
+    if client_id is not None:
+        return connection.cursor().execute(
+            'SELECT * FROM Student_Loan WHERE client_id = :id', id=client_id
+        ).fetchall()
+    else:
+        return connection.cursor().execute(
+            'SELECT * FROM Student_Loan'
+        ).fetchall()
+
+def addStudentLoan(client_id: int, loan_term: int, disbursement_date: datetime,
+                   repayment_start_date: datetime, repayment_end_date: datetime,
+                   monthly_payment: float, grace_period: int, loan_type: str,
+                   loan_id: int | None = None):
+    
+    if loan_id is None:
+        loan_id = connection.cursor().execute(
+            'SELECT max(loan_id) FROM Student_Loan'
+        ).fetchone()[0]
+
+    if loan_id is None:
+        loan_id = 1
+    else:
+        loan_id += 1
+
+    connection.cursor().execute(
+        'INSERT INTO Student_Loan VALUES (:1, :2, :3, :4, :5, :6, :7, :8, :9)',
+        [client_id, loan_id, loan_term, disbursement_date, repayment_start_date,
+         repayment_end_date, monthly_payment, grace_period, loan_type]
+    )
+    connection.commit()
+
+def updateStudentLoan(client_id: int, loan_term: int, disbursement_date: datetime,
+                   repayment_start_date: datetime, repayment_end_date: datetime,
+                   monthly_payment: float, grace_period: int, loan_type: str,
+                   loan_id: int):
+    connection.cursor().execute(
+        'UPDATE Student_Loan SET client_id=:1, loan_term=:2, disbursement_date=:3, \
+        Repayment_Start_Date=:4, Repayment_End_Date=:5, Monthly_Payment=:6, \
+        Grace_Period=:7, Loan_type=:8 WHERE loan_id=:9',
+        [client_id, loan_term, disbursement_date, repayment_start_date,
+         repayment_end_date, monthly_payment, grace_period, loan_type, loan_id]
+    )
+    connection.commit()
+
+def deleteStudentLoan(loan_id: int):
+    connection.cursor().execute(
+        'DELETE FROM Student_Loan WHERE loan_id = :loan_id', loan_id = loan_id
+    )
+
 def getMortgage(house_address: str):
     return connection.cursor().execute(
         'SELECT * FROM Mortgate WHERE address = :addr', addr = house_address
