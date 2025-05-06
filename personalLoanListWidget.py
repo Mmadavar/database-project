@@ -111,7 +111,7 @@ class personalLoanList(QListWidget):
         self.refresh()
     
     def deleteLoan(self):
-        database.deleteAutoLoan(self.editing)
+        database.deletePersonalLoan(self.editing)
         self.editing = None
         self.refresh()
 
