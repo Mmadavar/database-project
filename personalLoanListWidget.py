@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QListWidget, QListWidgetItem, QWidget, QPushButton, QHBoxLayout, QVBoxLayout
 import database
 from enterInfoDialog import enterInfoDialog
+from showInfoDialog import showInfoDialog
 from searchBarWidget import searchBarWidget
 import datetime
 
@@ -81,7 +82,10 @@ class personalLoanList(QListWidget):
             'Purpose': target[2]
         }
 
-        popup = enterInfoDialog(self, data, self.saveData)
+        if database.userid is not None:
+            popup = enterInfoDialog(self, data, self.saveData)
+        else:
+            popup = showInfoDialog(self, data)
         popup.open()
 
     def saveData(self, data:dict):

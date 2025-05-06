@@ -16,8 +16,9 @@ class showInfoDialog(QDialog):
 
             layout.addRow(title, value)
         
-        closeButton = QPushButton()
-        closeButton.clicked.connect(self.close())
+        closeButton = QPushButton(self)
+        closeButton.setText('Close')
+        closeButton.clicked.connect(self.close)
         layout.addWidget(closeButton)
 
         self.setLayout(layout)
