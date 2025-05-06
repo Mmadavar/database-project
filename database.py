@@ -64,10 +64,10 @@ def getAutoLoan(vin: str):
         'SELECT * FROM Auto_Loan WHERE VIN = :vin', vin=vin
     ).fetchone()
 
-def getAutoLoans(client_id: int | None = None):
-    if client_id is not None:
+def getAutoLoans():
+    if userid is not None:
         return connection.cursor().execute(
-            'SELECT * FROM Auto_Loan WHERE client_id = :id ORDER BY VIN ASC', id=client_id
+            'SELECT * FROM Auto_Loan WHERE client_id = :id ORDER BY VIN ASC', id=userid
         )
     else:
         return connection.cursor().execute(
@@ -105,10 +105,10 @@ def getPersonalLoan(loan_id: int):
         'SELECT * FROM Personal_Loan WHERE loan_id = :id', id=loan_id
     ).fetchone()
 
-def getPersonalLoans(client_id: int | None = None):
-    if client_id is not None:
+def getPersonalLoans():
+    if userid is not None:
         return connection.cursor().execute(
-            'SELECT * FROM Personal_Loan WHERE client_id = :id', id=client_id
+            'SELECT * FROM Personal_Loan WHERE client_id = :id', id=userid
         ).fetchall()
     else:
         return connection.cursor().execute(
@@ -158,10 +158,10 @@ def getStudentLoan(loan_id: int):
         'SELECT * FROM Student_Loan WHERE loan_id = :id', id=loan_id
     ).fetchone()
 
-def getStudentLoans(client_id: int | None = None):
-    if client_id is not None:
+def getStudentLoans():
+    if userid is not None:
         return connection.cursor().execute(
-            'SELECT * FROM Student_Loan WHERE client_id = :id', id=client_id
+            'SELECT * FROM Student_Loan WHERE client_id = :id', id=userid
         ).fetchall()
     else:
         return connection.cursor().execute(
@@ -213,10 +213,10 @@ def getMortgage(house_address: str):
         'SELECT * FROM Mortgage WHERE address = :addr', addr=house_address
     ).fetchone()
 
-def getMortgages(client_id: int | None = None):
-    if client_id is not None:
+def getMortgages():
+    if userid is not None:
         return connection.cursor().execute(
-            'SELECT * FROM Mortgage WHERE client_id = :cid', cid=client_id
+            'SELECT * FROM Mortgage WHERE client_id = :cid', cid=userid
         ).fetchall()
     else:
         return connection.cursor().execute(
