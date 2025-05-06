@@ -58,7 +58,7 @@ class customerList(QListWidget):
     def openDialog(self, client_id = None):
         if client_id is None:
             client_id = self.editing
-        target = database.getClient(self.editing)
+        target = database.getClient(client_id)
         if target is None:
             return
         
