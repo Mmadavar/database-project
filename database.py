@@ -60,9 +60,15 @@ def deleteClient(client_id: int):
     connection.commit()
 
 def getAutoLoan(vin: str):
-    return connection.cursor().execute(
-        'SELECT * FROM Auto_Loan WHERE VIN = :vin', vin=vin
-    ).fetchone()
+    if userid is None:
+        return connection.cursor().execute(
+            'SELECT * FROM Auto_Loan WHERE VIN = :vin', vin=vin
+        ).fetchone()
+    else:
+        return connection.cursor().execute(
+            'SELECT * FROM Auto_Loan WHERE VIN = :vin AND client_id = :cid', vin=vin, cid=userid
+        ).fetchone()
+
 
 def getAutoLoans():
     if userid is not None:
@@ -102,9 +108,14 @@ def deleteAutoLoan(vin: str):
     connection.commit()
 
 def getPersonalLoan(loan_id: int):
-    return connection.cursor().execute(
-        'SELECT * FROM Personal_Loan WHERE loan_id = :id', id=loan_id
-    ).fetchone()
+    if userid is None:
+        return connection.cursor().execute(
+            'SELECT * FROM Personal_Loan WHERE loan_id = :id', id=loan_id
+        ).fetchone()
+    else:
+        return connection.cursor().execute(
+            'SELECT * FROM Personal_Loan WHERE loan_id = :id AND client_id = :cid', id=loan_id, cid=userid
+        ).fetchone()
 
 def getPersonalLoans():
     if userid is not None:
@@ -155,9 +166,14 @@ def deletePersonalLoan(loan_id: int):
     connection.commit()
 
 def getStudentLoan(loan_id: int):
-    return connection.cursor().execute(
-        'SELECT * FROM Student_Loan WHERE loan_id = :id', id=loan_id
-    ).fetchone()
+    if userid is None:
+        return connection.cursor().execute(
+            'SELECT * FROM Student_Loan WHERE loan_id = :id', id=loan_id
+        ).fetchone()
+    else:
+        return connection.cursor().execute(
+            'SELECT * FROM Student_Loan WHERE loan_id = :id AND client_id = :cid', id=loan_id, cid=userid
+        ).fetchone()
 
 def getStudentLoans():
     if userid is not None:
@@ -211,9 +227,14 @@ def deleteStudentLoan(loan_id: int):
     connection.commit()
 
 def getMortgage(house_address: str):
-    return connection.cursor().execute(
-        'SELECT * FROM Mortgage WHERE house_address = :addr', addr=house_address
-    ).fetchone()
+    if userid is None:
+        return connection.cursor().execute(
+            'SELECT * FROM Mortgage WHERE house_address = :addr', addr=house_address
+        ).fetchone()
+    else:
+        return connection.cursor().execute(
+            'SELECT * FROM Mortgage WHERE house_address = :addr AND client_id = :cid', addr=house_address, cid=userid
+        ).fetchone()
 
 def getMortgages():
     if userid is not None:
