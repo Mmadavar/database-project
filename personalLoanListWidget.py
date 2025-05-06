@@ -12,18 +12,19 @@ class personalLoanListWidget(QWidget):
         mainwidget = personalLoanList()
         layout.addWidget(mainwidget)
 
-        deleteButton = QPushButton(self)
-        deleteButton.setText('Delete Selected')
-        deleteButton.clicked.connect(mainwidget.deleteLoan)
+        if database.userid is None:
+            deleteButton = QPushButton(self)
+            deleteButton.setText('Delete Selected')
+            deleteButton.clicked.connect(mainwidget.deleteLoan)
 
-        addButton = QPushButton(self)
-        addButton.setText('Add New Personal Loan')
-        addButton.clicked.connect(mainwidget.addLoan)
+            addButton = QPushButton(self)
+            addButton.setText('Add New Personal Loan')
+            addButton.clicked.connect(mainwidget.addLoan)
 
-        bottomLayout = QHBoxLayout()
-        bottomLayout.addWidget(deleteButton)
-        bottomLayout.addWidget(addButton)
-        layout.addLayout(bottomLayout)
+            bottomLayout = QHBoxLayout()
+            bottomLayout.addWidget(deleteButton)
+            bottomLayout.addWidget(addButton)
+            layout.addLayout(bottomLayout)
 
         layout.addWidget(searchBarWidget(self, 'Search Loan ID', lambda x: mainwidget.openDialog(int(x))))
 
@@ -82,7 +83,7 @@ class personalLoanList(QListWidget):
             'Purpose': target[2]
         }
 
-        if database.userid is not None:
+        if database.userid is None:
             popup = enterInfoDialog(self, data, self.saveData)
         else:
             popup = showInfoDialog(self, data)
