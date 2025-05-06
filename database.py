@@ -67,11 +67,11 @@ def getAutoLoan(vin: str):
 def getAutoLoans():
     if userid is not None:
         return connection.cursor().execute(
-            'SELECT * FROM Auto_Loan WHERE client_id = :id ORDER BY VIN ASC', id=userid
+            'SELECT VIN, client_id, Year_made, Make, Model FROM Auto_Loan WHERE client_id = :id ORDER BY VIN ASC', id=userid
         )
     else:
         return connection.cursor().execute(
-            'SELECT * FROM Auto_Loan order by VIN ASC'
+            'SELECT VIN, client_id, Year_made, Make, Model FROM Auto_Loan order by VIN ASC'
         ).fetchall()
 
 def addAutoLoan(
@@ -108,11 +108,11 @@ def getPersonalLoan(loan_id: int):
 def getPersonalLoans():
     if userid is not None:
         return connection.cursor().execute(
-            'SELECT * FROM Personal_Loan WHERE client_id = :id', id=userid
+            'SELECT loan_id, client_id, loan_amount FROM Personal_Loan WHERE client_id = :id', id=userid
         ).fetchall()
     else:
         return connection.cursor().execute(
-            'SELECT * FROM Personal_Loan'
+            'SELECT loan_id, client_id, loan_amount FROM Personal_Loan'
         ).fetchall()
     
 def addPersonalLoan(client_id: int, loan_purpose: str, loan_amount: str, 
@@ -161,11 +161,11 @@ def getStudentLoan(loan_id: int):
 def getStudentLoans():
     if userid is not None:
         return connection.cursor().execute(
-            'SELECT * FROM Student_Loan WHERE client_id = :id', id=userid
+            'SELECT loan_id, client_id, monthly_payment FROM Student_Loan WHERE client_id = :id', id=userid
         ).fetchall()
     else:
         return connection.cursor().execute(
-            'SELECT * FROM Student_Loan'
+            'SELECT loan_id, client_id, monthly_payment FROM Student_Loan'
         ).fetchall()
 
 def addStudentLoan(client_id: int, loan_term: int, disbursement_date: datetime,
@@ -216,11 +216,11 @@ def getMortgage(house_address: str):
 def getMortgages():
     if userid is not None:
         return connection.cursor().execute(
-            'SELECT * FROM Mortgage WHERE client_id = :cid', cid=userid
+            'SELECT house_address, client_id FROM Mortgage WHERE client_id = :cid', cid=userid
         ).fetchall()
     else:
         return connection.cursor().execute(
-            'SELECT * FROM Mortgage'
+            'SELECT house_address, client_id FROM Mortgage'
         ).fetchall()
 
 def deleteMortgage(house_address: str):

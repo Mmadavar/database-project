@@ -44,7 +44,7 @@ class studentLoanList(QListWidget):
         self.clear()
         for i in self.data:
             self.addItem(
-                f'id: {i[1]}, client: {i[0]}, Monthly Payment: {i[7]}'
+                f'id: {i[0]}, client: {i[1]}, Monthly Payment: {i[2]}'
             )
     
     def handleSingleClick(self, item):

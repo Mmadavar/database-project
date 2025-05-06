@@ -44,7 +44,7 @@ class mortgageList(QListWidget):
         self.clear()
         for i in self.data:
             self.addItem(
-                f'address: {i[1]}, client: {i[0]}'
+                f'address: {i[0]}, client: {i[1]}'
             )
         self.clearSelection()
     

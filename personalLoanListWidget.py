@@ -44,7 +44,7 @@ class personalLoanList(QListWidget):
         self.clear()
         for i in self.data:
             self.addItem(
-                f'id: {i[1]}, client: {i[0]}, amount: {i[3]}'
+                f'id: {i[0]}, client: {i[1]}, amount: {i[2]}'
             )
         self.clearSelection()
 

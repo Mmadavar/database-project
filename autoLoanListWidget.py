@@ -44,7 +44,7 @@ class autoLoanList(QListWidget):
         self.clear()
         for i in self.data:
             self.addItem(
-                f'vin: {i[1]}, client: {i[0]}, car: {i[10]} {i[7]} {i[8]}'
+                f'vin: {i[0]}, client: {i[1]}, car: {i[2]} {i[3]} {i[4]}'
             )
         self.clearSelection()
 
@@ -64,13 +64,7 @@ class autoLoanList(QListWidget):
             self.editing = loanId
             self.clearSelection()
 
-        target = None
-        for i in self.data:
-            if i[1] == self.editing:
-                target = i
-                break
-        else:
-            return
+        target = database.getAutoLoan(self.editing)
 
         data = {
             'Client ID': target[0],
