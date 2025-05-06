@@ -49,11 +49,7 @@ class customerList(QListWidget):
 
     
     def handleSingleClick(self, item):
-        text = item.text()
-        endidx = text.index(',')
-        startidx = text.index(':')+1
-        client_id = int(text[startidx:endidx])
-        self.editing = client_id
+        self.editing = self.clients[self.selectedIndexes()[0].row()][0]
 
     def handleDoubleClick(self, item: QListWidgetItem):
         self.handleSingleClick(item)
@@ -62,12 +58,8 @@ class customerList(QListWidget):
     def openDialog(self, client_id = None):
         if client_id is None:
             client_id = self.editing
-        target = None
-        for i in self.clients:
-            if i[0] == client_id:
-                target = i
-                break
-        else:
+        target = database.getClient(self.editing)
+        if target is None:
             return
         
         data = {

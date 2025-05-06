@@ -50,10 +50,7 @@ class personalLoanList(QListWidget):
 
     
     def handleSingleClick(self, item):
-        text = item.text()
-        endidx = text.index(',')
-        startidx = text.index(':')+2
-        self.editing = int(text[startidx:endidx])
+        self.editing = self.data[self.selectedIndexes()[0].row()][0]
 
     def handleDoubleClick(self, item: QListWidgetItem):
         self.handleSingleClick(item)
@@ -64,14 +61,10 @@ class personalLoanList(QListWidget):
             self.editing = loanId
             self.clearSelection()
 
-        target = None
-        for i in self.data:
-            if i[1] == self.editing:
-                target = i
-                break
-        else:
+        target = database.getPersonalLoan(self.editing)
+        if target is None:
             return
-
+        
         data = {
             'Client ID': target[0],
             'Loan Amount': target[3],

@@ -50,10 +50,7 @@ class autoLoanList(QListWidget):
 
     
     def handleSingleClick(self, item):
-        text = item.text()
-        endidx = text.index(',')
-        startidx = text.index(':')+2
-        self.editing = text[startidx:endidx]
+        self.editing = self.data[self.selectedIndexes()[0].row()][0]
 
     def handleDoubleClick(self, item: QListWidgetItem):
         self.handleSingleClick(item)
@@ -65,6 +62,8 @@ class autoLoanList(QListWidget):
             self.clearSelection()
 
         target = database.getAutoLoan(self.editing)
+        if target is None:
+            return
 
         data = {
             'Client ID': target[0],
