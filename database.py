@@ -210,8 +210,24 @@ def deleteStudentLoan(loan_id: int):
 
 def getMortgage(house_address: str):
     return connection.cursor().execute(
-        'SELECT * FROM Mortgate WHERE address = :addr', addr = house_address
+        'SELECT * FROM Mortgate WHERE address = :addr', addr=house_address
     ).fetchone()
+
+def deleteMortgage(house_address: str):
+    connection.cursor.execute(
+    'DELETE FROM Mortgage WHERE address = :addr', addr=house_address
+    )
+    connection.commit()
+
+def addMortgage(client_id: int, house_address: str, house_area: float, num_bedrooms: int,
+                house_price: float, loan_amount: float, interest_rate: float, amount_paid: float, start_date: datetime,
+                num_payments: int, end_date: datetime):
+    connection.cursor.execute(
+        'INSERT INTO Mortgage VALUES (:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11)',
+        [client_id, house_address, house_area, num_bedrooms, house_price, loan_amount,
+         interest_rate, start_date, num_payments, end_date,]
+    )
+    connection.commit()
 
 def dropTables():
     cursor = connection.cursor()
@@ -232,6 +248,7 @@ def dropTables():
 
 def createTables():
     cursor = connection.cursor()
+
 
     cursor.execute(
         '''create table Client (
