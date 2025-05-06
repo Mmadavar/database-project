@@ -69,12 +69,11 @@ def getAutoLoan(vin: str):
             'SELECT * FROM Auto_Loan WHERE VIN = :vin AND client_id = :cid', vin=vin, cid=userid
         ).fetchone()
 
-
 def getAutoLoans():
     if userid is not None:
         return connection.cursor().execute(
             'SELECT VIN, client_id, Year_made, Make, Model FROM Auto_Loan WHERE client_id = :id ORDER BY VIN ASC', id=userid
-        )
+        ).fetchall()
     else:
         return connection.cursor().execute(
             'SELECT VIN, client_id, Year_made, Make, Model FROM Auto_Loan order by VIN ASC'
