@@ -4,6 +4,7 @@ from customerListWidget import customerListWidget
 from autoLoanListWidget import autoLoanListWidget
 from personalLoanListWidget import personalLoanListWidget
 from studentLoanListWidget import studentLoanListWidget
+from mortgageListWidget import mortgageListWidget
 from sys import argv
 import database
 
@@ -14,6 +15,10 @@ class MainWindow(QMainWindow):
         loginPopup = loginDialog()
         loginPopup.exec()
 
+        # if popup closed without logging in
+        if database.connection is None:
+            exit()
+
         self.widget = QTabWidget()
 
         # only show customer list when logged in as admin
@@ -23,6 +28,7 @@ class MainWindow(QMainWindow):
         self.widget.addTab(autoLoanListWidget(), 'Auto Loans')
         self.widget.addTab(personalLoanListWidget(), 'Personal Loans')
         self.widget.addTab(studentLoanListWidget(), 'Student Loans')
+        self.widget.addTab(mortgageListWidget(), 'Mortgage List')
 
         self.setCentralWidget(self.widget)
 

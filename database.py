@@ -210,17 +210,17 @@ def deleteStudentLoan(loan_id: int):
 
 def getMortgage(house_address: str):
     return connection.cursor().execute(
-        'SELECT * FROM Mortgate WHERE address = :addr', addr=house_address
+        'SELECT * FROM Mortgage WHERE address = :addr', addr=house_address
     ).fetchone()
 
 def getMortgages(client_id: int | None = None):
     if client_id is not None:
         return connection.cursor().execute(
-            'SELECT * FROM Mortgate WHERE client_id = :cid', cid=client_id
+            'SELECT * FROM Mortgage WHERE client_id = :cid', cid=client_id
         ).fetchall()
     else:
         return connection.cursor().execute(
-            'SELECT * FROM Mortgate'
+            'SELECT * FROM Mortgage'
         ).fetchall()
 
 def deleteMortgage(house_address: str):
@@ -235,7 +235,7 @@ def addMortgage(client_id: int, house_address: str, house_area: float, num_bedro
     connection.cursor().execute(
         'INSERT INTO Mortgage VALUES (:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11)',
         [client_id, house_address, house_area, num_bedrooms, house_price, loan_amount,
-         interest_rate, start_date, num_payments, end_date,]
+         interest_rate, amount_paid, start_date, num_payments, end_date,]
     )
     connection.commit()
 
@@ -243,7 +243,7 @@ def updateMortgage(client_id: int, house_address: str, house_area: float, num_be
                 house_price: float, loan_amount: float, interest_rate: float, amount_paid: float, start_date: datetime,
                 num_payments: int, end_date: datetime):
     connection.cursor().execute(
-        'UPDATE Mortgate SET client_id=:1, house_area=:2, \
+        'UPDATE Mortgage SET client_id=:1, house_area=:2, \
         num_bedrooms=:3, house_price=:4, loan_amount=:5, interest_rate=:6, \
         amount_paid=:7, start_date=:8, num_payments=:9, end_date=:10 \
         WHERE house_address=:11',

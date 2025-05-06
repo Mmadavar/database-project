@@ -45,6 +45,8 @@ class customerList(QListWidget):
             self.addItem(
                 f'id:{i[0]}, name: {i[1]} {i[2]}, income: {i[3]}'
             )
+        self.clearSelection()
+
     
     def handleSingleClick(self, item):
         text = item.text()

@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QScrollArea, QListWidget, QListWidgetItem, QWidget, QPushButton, QHBoxLayout, QVBoxLayout
+from PyQt6.QtWidgets import QListWidget, QListWidgetItem, QWidget, QPushButton, QHBoxLayout, QVBoxLayout
 import database
 from enterInfoDialog import enterInfoDialog
 from searchBarWidget import searchBarWidget
@@ -44,6 +44,8 @@ class autoLoanList(QListWidget):
             self.addItem(
                 f'vin: {i[1]}, client: {i[0]}, car: {i[10]} {i[7]} {i[8]}'
             )
+        self.clearSelection()
+
     
     def handleSingleClick(self, item):
         text = item.text()
@@ -107,7 +109,7 @@ class autoLoanList(QListWidget):
     def newData(self, data):
         database.addAutoLoan(
             int(data['Client ID']),
-            data['VIN'],
+            data['VIN'].replace(',',''),
             float(data['Loan Amount']),
             float(data['Interest Rate']),
             datetime.datetime.strptime(data['Start Date'], '%Y-%m-%d %H:%M:%S'),

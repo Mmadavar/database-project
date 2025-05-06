@@ -4,11 +4,11 @@ from enterInfoDialog import enterInfoDialog
 from searchBarWidget import searchBarWidget
 import datetime
 
-class personalLoanListWidget(QWidget):
+class mortgageListWidget(QWidget):
     def __init__(self, parent = None):
-        super(personalLoanListWidget, self).__init__(parent)
+        super(mortgageListWidget, self).__init__(parent)
         layout = QVBoxLayout()
-        mainwidget = personalLoanList()
+        mainwidget = mortgageList()
         layout.addWidget(mainwidget)
 
         deleteButton = QPushButton(self)
@@ -16,7 +16,7 @@ class personalLoanListWidget(QWidget):
         deleteButton.clicked.connect(mainwidget.deleteLoan)
 
         addButton = QPushButton(self)
-        addButton.setText('Add New Personal Loan')
+        addButton.setText('Add New Mortgage')
         addButton.clicked.connect(mainwidget.addLoan)
 
         bottomLayout = QHBoxLayout()
@@ -24,13 +24,13 @@ class personalLoanListWidget(QWidget):
         bottomLayout.addWidget(addButton)
         layout.addLayout(bottomLayout)
 
-        layout.addWidget(searchBarWidget(self, 'Search Loan ID', lambda x: mainwidget.openDialog(int(x))))
+        layout.addWidget(searchBarWidget(self, 'Search Address', lambda x: mainwidget.openDialog(x)))
 
         self.setLayout(layout)
 
-class personalLoanList(QListWidget):
+class mortgageList(QListWidget):
     def __init__(self, parent = None):
-        super(personalLoanList, self).__init__(parent)        
+        super(mortgageList, self).__init__(parent)        
         self.itemDoubleClicked.connect(self.handleDoubleClick)
         self.itemClicked.connect(self.handleSingleClick)
         
@@ -38,20 +38,19 @@ class personalLoanList(QListWidget):
         self.refresh()
     
     def refresh(self):
-        self.data = database.getPersonalLoans()
+        self.data = database.getMortgages()
         self.clear()
         for i in self.data:
             self.addItem(
-                f'id: {i[1]}, client: {i[0]}, amount: {i[3]}'
+                f'address: {i[1]}, client: {i[0]}'
             )
         self.clearSelection()
-
     
     def handleSingleClick(self, item):
         text = item.text()
         endidx = text.index(',')
         startidx = text.index(':')+2
-        self.editing = int(text[startidx:endidx])
+        self.editing = text[startidx:endidx]
 
     def handleDoubleClick(self, item: QListWidgetItem):
         self.handleSingleClick(item)
@@ -72,49 +71,57 @@ class personalLoanList(QListWidget):
 
         data = {
             'Client ID': target[0],
-            'Loan Amount': target[3],
-            'Interest Rate': target[4],
-            'Start Date': target[6],
-            'End Date': target[7],
-            'Number of Payments': target[8],
-            'Amount Paid': target[5],
-            'Purpose': target[2]
+            'Loan Amount': target[5],
+            'Interest Rate': target[6],
+            'Start Date': target[8],
+            'End Date': target[10],
+            'Number of Payments': target[9],
+            'Amount Paid': target[7],
+            'House Area': target[2],
+            'Bedrooms': target[3],
+            'House Price': target[4]
         }
 
         popup = enterInfoDialog(self, data, self.saveData)
         popup.open()
 
     def saveData(self, data:dict):
-        database.updatePersonalLoan(
+        
+        database.updateMortgage(
             int(data['Client ID']),
-            data['Purpose'],
+            self.editing,
+            float(data['House Area']),
+            int(data['Bedrooms']),
+            float(data['House Price']),
             float(data['Loan Amount']),
             float(data['Interest Rate']),
             float(data['Amount Paid']),
             datetime.datetime.strptime(data['Start Date'], '%Y-%m-%d %H:%M:%S'),
-            datetime.datetime.strptime(data['End Date'], '%Y-%m-%d %H:%M:%S'),
             int(data['Number of Payments']),
-            self.editing
+            datetime.datetime.strptime(data['End Date'], '%Y-%m-%d %H:%M:%S')
         )
 
         self.editing = None
         self.refresh()
 
     def newData(self, data):
-        database.addPersonalLoan(
+        database.addMortgage(
             int(data['Client ID']),
-            data['Purpose'],
+            data['House Address'].replace(',', ''),
+            float(data['House Area']),
+            int(data['Bedrooms']),
+            float(data['House Price']),
             float(data['Loan Amount']),
             float(data['Interest Rate']),
             float(data['Amount Paid']),
             datetime.datetime.strptime(data['Start Date'], '%Y-%m-%d %H:%M:%S'),
-            datetime.datetime.strptime(data['End Date'], '%Y-%m-%d %H:%M:%S'),
-            int(data['Number of Payments'])
+            int(data['Number of Payments']),
+            datetime.datetime.strptime(data['End Date'], '%Y-%m-%d %H:%M:%S')
         )
         self.refresh()
     
     def deleteLoan(self):
-        database.deletePersonalLoan(self.editing)
+        database.deleteMortgage(self.editing)
         self.editing = None
         self.refresh()
 
@@ -127,7 +134,10 @@ class personalLoanList(QListWidget):
             'End Date',
             'Number of Payments',
             'Amount Paid',
-            'Purpose'
+            'House Address',
+            'House Area',
+            'Bedrooms',
+            'House Price'
         ]
         popup = enterInfoDialog(self, data, self.newData)
         popup.open()
