@@ -56,7 +56,7 @@ class personalLoanList(QListWidget):
         self.openDialog()
 
     def openDialog(self, loanId = None):
-        if self.editing is None:
+        if loanId is not None:
             self.editing = loanId
 
         target = None
