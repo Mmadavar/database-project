@@ -1,4 +1,7 @@
-it is <24hrs before due and I am far from done
+Poetry is required to run this project: https://python-poetry.org
 
-If you want code quality please don't look at this repo
-you will very likely see some horrible things
+Install dependencies:
+`poetry install`
+
+Run program:
+`poetry run python3 main.py`
